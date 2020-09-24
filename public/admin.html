@@ -36,10 +36,14 @@
         const socket = io()
 
         video.addEventListener('play', () => {
+            const seconds = video.currentTime
+            socket.emit('action', 'goTo', seconds)
             socket.emit('action', 'play')
         })
 
         video.addEventListener('pause', () => {
+            const seconds = video.currentTime
+            socket.emit('action', 'goTo', seconds)
             socket.emit('action', 'pause')
         })
 
