@@ -34,13 +34,22 @@
     <script>
         const video = document.querySelector('video')
         const socket = io()
+        let receivedCommand = false
 
         video.addEventListener('play', () => {
-            socket.emit('action', 'sincronize')
+            if (!receivedCommand) {
+                socket.emit('action', 'sincronize')
+            }
+
+            receivedCommand = false
         })
 
         video.addEventListener('pause', () => {
-            video.play()
+            if (!receivedCommand) {
+                video.play()
+            }
+
+            receivedCommand = false
         })
 
         function showVideo() {
@@ -50,6 +59,7 @@
         }
 
         socket.on('broadcast', (action, value) => {
+            receivedCommand = true
             switch (action) {
                 case 'play':
                     video.play()
