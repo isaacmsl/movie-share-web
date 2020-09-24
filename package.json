@@ -1,0 +1,17 @@
+{
+  "name": "movie-share-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "keywords": [],
+  "author": "Paulo Vitor Lima Borges e Isaac Marlon da Silva Lourenço",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}
