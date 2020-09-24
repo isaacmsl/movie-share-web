@@ -6,3 +6,7 @@ video {
 #btnSincronizar {
     display: none;
 }
+
+.clientVideo::-webkit-media-controls-timeline {
+    display: none !important;
+}

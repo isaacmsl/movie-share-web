@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <video>
+    <video controls class="clientVideo">
         <source src="https://drive.google.com/uc?export=view&id=1na7sYcYkpdHzX8nZr7cmf3-YtQzDN-_M" type="video/mp4">
         Seu navegador não suporta o elemento <code>video</code>.
     </video>
@@ -35,9 +35,18 @@
         const video = document.querySelector('video')
         const socket = io()
 
+        video.addEventListener('play', () => {
+            socket.emit('action', 'sincronize')
+        })
+
+        video.addEventListener('pause', () => {
+            video.play()
+        })
+
         function showVideo() {
             video.style.display = 'block'
             document.querySelector('button').style.display = 'none'
+            video.play()
         }
 
         socket.on('broadcast', (action, value) => {
@@ -50,7 +59,6 @@
                     break
                 case 'goTo':
                     video.currentTime = value
-                    video.play()
                     break
             }
         })

@@ -20,9 +20,6 @@
             <button id="btnComecar" onclick="show()">
                 Começar a assistir
             </button>
-            <button id="btnSincronizar" onclick="sincronizarClients()">
-                Sincronizar
-            </button>
         </div>
     </div>
 
@@ -57,10 +54,12 @@
             document.querySelector('#btnSincronizar').style.display = 'block'
         }
 
-        function sincronizarClients() {
-            const seconds = video.currentTime
-            socket.emit('action', 'goTo', seconds)
-        }
+        socket.on('broadcast', (action) => {
+            if (action === 'sincronize') {
+                const seconds = video.currentTime
+                socket.emit('action', 'goTo', seconds)
+            }
+        })
     </script>
 </body>
 
