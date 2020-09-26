@@ -8,6 +8,7 @@
 
 body {
     background-color: #000;
+    overflow: hidden;
 }
 
 video {
@@ -44,7 +45,14 @@ video {
     color: #606060;
 }
 
-.cardInicial button {
+.cardInicial input[type="text"] {
+    padding: 1em;
+    width: 100%;
+    font-size: 1em;
+    background-color: #eeeeee;
+}
+
+.cardInicial input[type="submit"] {
     padding: 1em;
     font-weight: bold;
     font-size: 1em;
@@ -53,10 +61,54 @@ video {
     color: #FFF;
 }
 
+.inputContainer {
+    display: grid;
+    gap: 1em;
+}
+
+.inputSpanError {
+    display: none;
+    color: #FF0000;
+    font-weight: bold;
+}
+
 #btnSincronizar {
     display: none;
 }
 
 .clientVideo::-webkit-media-controls-timeline {
     display: none !important;
+}
+
+.cardNotifications {
+    display: grid;
+    gap: 1em;
+    position: absolute;
+    bottom: 5em;
+    right: 0;
+}
+
+.systemNotification {
+    display: flex;
+    gap: .4em;
+    background-color: #FFF;
+    font-weight: bold;
+    padding: 1em;
+    animation: showCardNotification;
+    animation-duration: 3s;
+}
+
+@keyframes showCardNotification {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }

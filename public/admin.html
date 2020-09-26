@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div class="cardInicial">
+    <form class="cardInicial">
         <div>
             <h1>
                 Welcome to Movie Share!
@@ -18,23 +18,52 @@
             <p>
                 Watching movies with your friends never was too easy
             </p>
-            <button onclick="show()">
-                Ssssssh!
-            </button>
+            <div class="inputContainer">
+                <input type="text" name="username" placeholder="Username" autofocus required>
+                <span class="inputSpanError">There is someone with that username.</span>
+            </div>
+            <input type="submit" value="Sssssh!">
         </div>
-    </div>
+    </form>
 
     <video controls>
         <source src="https://dl.dropboxusercontent.com/s/9mvqo6ga3jzhh07/Um.Lugar.Silencioso.2018.1080p.WEB-DL.6CH..x264.DUAL-WWW.COMANDOTORRENTS.COM.mkv?dl=0" type="video/mp4">
         Seu navegador não suporta o elemento <code>video</code>.
     </video>
 
+    <div class="cardNotifications">
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
         integrity="sha512-v8ng/uGxkge3d1IJuEo6dJP8JViyvms0cly9pnbfRxT6/31c3dRWxIiwGnMSWwZjHKOuY3EVmijs7k1jz/9bLA=="
         crossorigin="anonymous"></script>
     <script>
         const video = document.querySelector('video')
+        const cardNotifications = document.querySelector('.cardNotifications')
+        const form = document.querySelector('form')
         const socket = io()
+
+        form.addEventListener('submit', event => {
+            event.preventDefault()
+
+            const username = form.elements.username.value
+
+            if (username) {
+                socket.emit('setUsername', username)
+            }
+        })
+
+        socket.on('canWatch', () => {
+            showVideo()
+        })
+
+        socket.on('existingUsername', () => {
+            const usernameInput = document.querySelector('input[name="username"]')
+            const usernameSpanError = document.querySelector('input[name="username"] + span.inputSpanError')
+
+            usernameInput.focus()
+            usernameSpanError.style.display = 'block'
+        })
 
         video.addEventListener('play', () => {
             const seconds = video.currentTime
@@ -46,6 +75,9 @@
             const seconds = video.currentTime
             socket.emit('action', 'goTo', seconds)
             socket.emit('action', 'pause')
+            const notificationPaused = createNotitification(`The movie was paused`)
+            cardNotifications.appendChild(notificationPaused)
+            notificationPaused.style.display = 'flex'
         })
 
         video.addEventListener('seeked', () => {
@@ -53,17 +85,41 @@
             socket.emit('action', 'goTo', seconds)
         })
 
-        function show() {
+        function showVideo() {
             video.style.display = 'block'
-            document.querySelector('.cardInicial').style.display = 'none'
+            form.style.display = 'none'
         }
 
-        socket.on('broadcast', (action) => {
-            if (action === 'sincronize') {
-                const seconds = video.currentTime
-                socket.emit('action', 'goTo', seconds)
+        socket.on('broadcast', (action, value) => {
+            switch (action) {
+                case 'sincronize':
+                    const seconds = video.currentTime
+                    socket.emit('action', 'goTo', seconds)
+                    break
+                case 'newUser':
+                    const notificationNewUser = createNotitification(`${value} joined`)
+                    cardNotifications.appendChild(notificationNewUser)
+                    notificationNewUser.style.display = 'flex'
+                    break
+                case 'userDisconnected':
+                    const notificationUserDisconnected = createNotitification(`${value} exited`)
+                    cardNotifications.appendChild(notificationUserDisconnected)
+                    notificationUserDisconnected.style.display = 'flex'
+                    break
             }
         })
+
+        function createNotitification(message) {
+            const notification = document.createElement('div')
+
+            notification.classList.add('systemNotification')
+            notification.innerHTML = `<p>${message}</p><img src="favicon.ico" alt="S2">`
+            notification.addEventListener('animationend', () => {
+                cardNotifications.removeChild(notification)
+            })
+
+            return notification
+        }
     </script>
 </body>
 
