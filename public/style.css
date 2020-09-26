@@ -1,6 +1,56 @@
+* {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    background-color: #000;
+}
+
 video {
     display: none;
     width: 100%;
+    height: 100vh;
+}
+
+.cardInicial {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.6);
+    display: grid;
+    place-items: center;
+    padding: 1em;
+}
+
+.cardInicial > div {
+    background-color: #FFF;
+    display: grid;
+    gap: 1.4em;
+    padding: 2em;
+    line-height: 1.5em;
+}
+
+.cardInicial h1 {
+    line-height: 1.2em;
+}
+
+.cardInicial p {
+    color: #606060;
+}
+
+.cardInicial button {
+    padding: 1em;
+    font-weight: bold;
+    font-size: 1em;
+    background-color: #FF0000;
+    cursor: pointer;
+    color: #FFF;
 }
 
 #btnSincronizar {

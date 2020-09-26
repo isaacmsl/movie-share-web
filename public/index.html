@@ -6,19 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Share</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/gif" sizes="16x16">
 </head>
 
 <body>
-    <div class="assistirCard">
+    <div class="cardInicial">
         <div>
             <h1>
-                Bem vindo(a) ao Movie Share
+                Welcome to Movie Share!
             </h1>
             <p>
-                Assista filmes em conjunto, simultaneamente.
+                Watching movies with your friends never was too easy
             </p>
             <button onclick="showVideo()">
-                Começar a assistir
+                Ssssssh!
             </button>
         </div>
     </div>
@@ -54,7 +55,7 @@
 
         function showVideo() {
             video.style.display = 'block'
-            document.querySelector('button').style.display = 'none'
+            document.querySelector('.cardInicial').style.display = 'none'
             video.play()
         }
 
