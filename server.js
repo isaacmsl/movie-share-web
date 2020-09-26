@@ -11,6 +11,7 @@ app.use(express.static('public'))
 
 let currentUsers = new Map()
 let isPaused = true
+let currentVideoSrc = ''
 
 io.on('connection', (socket) => {
     socket.on('setUsername', username => {
@@ -22,14 +23,18 @@ io.on('connection', (socket) => {
                 return
             }
         })
-        
+
         if (thereIsUsername) return
 
         debug('new user -> ' + username)
         currentUsers.set(socket.id, username)
-        socket.emit('canWatch', isPaused)
+        socket.emit('canWatch', isPaused, currentVideoSrc)
         io.emit('broadcast', 'newUser', username)
 
+    })
+
+    socket.on('setVideoSrc', videoSrc => {
+        currentVideoSrc = videoSrc
     })
 
     socket.on('disconnect', () => {

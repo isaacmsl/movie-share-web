@@ -27,7 +27,7 @@
     </form>
 
     <video controls class="clientVideo">
-        <source src="https://dl.dropboxusercontent.com/s/9mvqo6ga3jzhh07/Um.Lugar.Silencioso.2018.1080p.WEB-DL.6CH..x264.DUAL-WWW.COMANDOTORRENTS.COM.mkv?dl=0">
+        <source src="">
         Seu navegador não suporta o elemento <code>video</code>.
     </video>
 
@@ -55,8 +55,8 @@
             }
         })
 
-        socket.on('canWatch', isPaused => {
-            showVideo()
+        socket.on('canWatch', (isPaused, currentVideoSrc) => {
+            showVideo(currentVideoSrc)
             
             if (!isPaused) {
                 video.play()
@@ -87,8 +87,10 @@
             receivedCommand = false
         })
 
-        function showVideo() {
+        function showVideo(currentVideoSrc) {
             video.style.display = 'block'
+            video.querySelector('source').setAttribute('src', currentVideoSrc)
+            video.load()
             form.style.display = 'none'
         }
 

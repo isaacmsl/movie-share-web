@@ -22,12 +22,24 @@
                 <input type="text" name="username" placeholder="Username" autofocus required>
                 <span class="inputSpanError">There is someone with that username.</span>
             </div>
+            <!-- <div class="inputContainer">
+                <input type="text" name="youtubeUrl" placeholder="Youtube URL" autofocus required>
+                <span class="inputSpanError">There is something wrong with the URL.</span>
+            </div> -->
+            <div class="inputContainer">
+                <input type="text" name="dropboxUrl" placeholder="Dropbox URL" autofocus required>
+                <span class="inputSpanError">There is something wrong with the URL.</span>
+            </div>
+            <!-- <div class="inputContainer">
+                <input type="text" name="gdriveUrl" placeholder="Google Drive URL" autofocus required>
+                <span class="inputSpanError">There is something wrong with the URL.</span>
+            </div> -->
             <input type="submit" value="Sssssh!">
         </div>
     </form>
 
     <video controls>
-        <source src="https://dl.dropboxusercontent.com/s/9mvqo6ga3jzhh07/Um.Lugar.Silencioso.2018.1080p.WEB-DL.6CH..x264.DUAL-WWW.COMANDOTORRENTS.COM.mkv?dl=0" type="video/mp4">
+        <source src="">
         Seu navegador não suporta o elemento <code>video</code>.
     </video>
 
@@ -47,14 +59,19 @@
             event.preventDefault()
 
             const username = form.elements.username.value
+            
+            const dropboxUrl = form.elements.dropboxUrl.value
 
-            if (username) {
+            if (username && dropboxUrl) {
+                const dropboxEmbedUrl = dropboxUrl.replace('https://www.dropbox.com/', 'https://dl.dropboxusercontent.com/')
+
                 socket.emit('setUsername', username)
+                socket.emit('setVideoSrc', dropboxEmbedUrl)
             }
         })
 
-        socket.on('canWatch', () => {
-            showVideo()
+        socket.on('canWatch', (isPaused, currentVideoSrc) => {
+            showVideo(currentVideoSrc)
         })
 
         socket.on('existingUsername', () => {
@@ -85,8 +102,10 @@
             socket.emit('action', 'goTo', seconds)
         })
 
-        function showVideo() {
+        function showVideo(currentVideoSrc) {
             video.style.display = 'block'
+            video.querySelector('source').setAttribute('src', currentVideoSrc)
+            video.load()
             form.style.display = 'none'
         }
 
